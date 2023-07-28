@@ -7,21 +7,31 @@ import logoImage from '../../assets/logo.png'
 
 type HeaderProps = {
   task: string;
+  inputRef: React.RefObject<TextInput>;
   onChangeText: (task: string) => void;
   onPress: () => void;
 }
 
-export function Header({ task, onChangeText, onPress }: HeaderProps) {
+export function Header({ task, inputRef, onChangeText, onPress }: HeaderProps) {
   return (
     <View style={styles.header}>
       <Image source={logoImage} />
         <View style={styles.form}>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              inputRef.current?.isFocused()
+                ? styles.inputBorder
+                : null,
+            ]}
             placeholder='Adicione uma nova tarefa'
             placeholderTextColor={theme.colors.base.gray300}
             value={task}
             onChangeText={onChangeText}
+            ref={inputRef}
+            autoCorrect={false}
+            onSubmitEditing={onPress}
+            returnKeyType="done"
           />
           <TouchableOpacity style={styles.button} onPress={onPress}>
             <MaterialCommunityIcons
